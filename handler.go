@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"mime"
 	"net"
@@ -254,14 +254,16 @@ func serveFile(path string, log *LogEntry, conn net.Conn, config Config, errorLo
 		mimeType += "; lang=" + config.DefaultLang
 	}
 
-	contents, err := ioutil.ReadFile(path)
+	f, err := os.Open(path)
 	if err != nil {
 		errorLog.Println("Error reading file " + path + ": " + err.Error())
 		conn.Write([]byte("50 Error!\r\n"))
 		log.Status = 50
 		return
 	}
+	defer f.Close()
+
 	conn.Write([]byte(fmt.Sprintf("20 %s\r\n", mimeType)))
+	io.Copy(conn, f)
 	log.Status = 20
-	conn.Write(contents)
 }

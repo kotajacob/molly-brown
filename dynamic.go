@@ -168,12 +168,14 @@ func prepareSCGIVariables(config Config, URL *url.URL, scgiPath string, conn net
 func prepareGatewayVariables(config Config, URL *url.URL, conn net.Conn) map[string]string {
 	vars := make(map[string]string)
 	vars["QUERY_STRING"] = URL.RawQuery
-	vars["REMOTE_ADDR"] = conn.RemoteAddr().String()
 	vars["REQUEST_METHOD"] = ""
 	vars["SERVER_NAME"] = config.Hostname
 	vars["SERVER_PORT"] = strconv.Itoa(config.Port)
 	vars["SERVER_PROTOCOL"] = "GEMINI"
 	vars["SERVER_SOFTWARE"] = "MOLLY_BROWN"
+
+	host, _, _ := net.SplitHostPort(conn.RemoteAddr().String())
+	vars["REMOTE_ADDR"] = host
 
 	// Add TLS variables
 	var tlsConn (*tls.Conn) = conn.(*tls.Conn)

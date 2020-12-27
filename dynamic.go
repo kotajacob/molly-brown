@@ -191,6 +191,8 @@ func prepareGatewayVariables(config Config, URL *url.URL, conn net.Conn) map[str
 		vars["TLS_CLIENT_ISSUER_CN"] = cert.Issuer.CommonName
 		vars["TLS_CLIENT_SUBJECT"] = cert.Subject.String()
 		vars["TLS_CLIENT_SUBJECT_CN"] = cert.Subject.CommonName
+		// To make it easier to detect when a cert is present
+		vars["AUTH_TYPE"] = "Certificate"
 	}
 	return vars
 }

@@ -205,7 +205,8 @@ func serveDirectory(URL *url.URL, path string, log *LogEntry, conn net.Conn, con
 	// Redirect to add trailing slash if missing
 	// (otherwise relative links don't work properly)
 	if !strings.HasSuffix(URL.Path, "/") {
-		conn.Write([]byte(fmt.Sprintf("31 %s\r\n", URL.String()+"/")))
+		URL.Path += "/"
+		conn.Write([]byte(fmt.Sprintf("31 %s\r\n", URL.String())))
 		log.Status = 31
 		return
 	}

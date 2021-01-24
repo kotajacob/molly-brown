@@ -198,10 +198,12 @@ examples of the appropriate syntax.
   `/var/gemini/users/gus/` to `/home/gus/public_gemini/` if you want.
 * `AccessLog`: Path to access log file (default value `access.log`,
   i.e. in the current wrorking directory).  Note that all intermediate
-  directories must exist, Molly Brown won't create them for you.
+  directories must exist, Molly Brown won't create them for you.  Set
+  to `-` for logging to `stdout`.
 * `ErrorLog`: Path to error log file (default value `error.log`, i.e.
   in the current wrorking directory).  Note that all intermediate
-  directories must exist, Molly Brown won't create them for you.
+  directories must exist, Molly Brown won't create them for you.  Set
+  to `-` for logging to `stdout`.
 * `GeminiExt`: Files with this extension will be served with a MIME
   type of `text/gemini` (default value `gmi`).
 * `MimeOverrides`: In this section of the config file, keys are path

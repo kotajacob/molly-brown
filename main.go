@@ -26,19 +26,29 @@ func main() {
 	}
 
 	// Open log files
-	errorLogFile, err := os.OpenFile(config.ErrorLog, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal(err)
+	var errorLogFile *os.File
+	if config.ErrorLog == "-" {
+		errorLogFile = os.Stdout
+	} else {
+		errorLogFile, err = os.OpenFile(config.ErrorLog, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer errorLogFile.Close()
 	}
-	defer errorLogFile.Close()
 	errorLog := log.New(errorLogFile, "", log.Ldate | log.Ltime)
 
-	accessLogFile, err := os.OpenFile(config.AccessLog, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		errorLog.Println("Error opening access log file: " + err.Error())
-		log.Fatal(err)
+	var accessLogFile *os.File
+	if config.AccessLog == "-" {
+		accessLogFile = os.Stdout
+	} else {
+		accessLogFile, err = os.OpenFile(config.AccessLog, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			errorLog.Println("Error opening access log file: " + err.Error())
+			log.Fatal(err)
+		}
+		defer accessLogFile.Close()
 	}
-	defer accessLogFile.Close()
 
 	// Read TLS files, create TLS config
 	cert, err := tls.LoadX509KeyPair(config.CertPath, config.KeyPath)

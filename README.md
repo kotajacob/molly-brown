@@ -165,6 +165,23 @@ You can start your `mollybrownd` daemon with `rcctl`:
 rcctl start mollybrownd
 ```
 
+#### FreeBSD
+
+An example FreeBSD rc script is in
+`contrib/init/molly-brown.freebsd.example`.
+
+Copy rc script to `/etc/rc.d/molly`, and add `molly_enable="YES"`
+to `/etc/rc.conf` to enable the service.
+
+Make sure the `daemon` user has access to config locations in
+`molly.conf` like `CertPath`, `KeyPath`, `DocBase`, etc.
+
+Start `molly` with,
+
+```
+service molly start
+```
+
 ## Configuration Options
 
 The following sections detail all the options which can be set in
